@@ -7,9 +7,9 @@ Replace this section with what the project does and how it is structured.
 ## Rules
 
 - Python 3.12+, managed with `uv`. Never call `pip` directly.
-- Type hints on every function signature. Pydantic v2 for validation and settings.
+- Type hints on every function signature; mypy runs in strict mode. Pydantic v2 for validation and settings.
 - `structlog` for logging with keyword context. Never `print()` or stdlib `logging`.
-- Ruff for lint and format: line-length 100, double quotes, single-line imports.
+- Ruff for lint and format: line-length 120, single quotes, single-line imports, two blank lines after imports.
 - Tests with pytest, named `test_should_<behavior>_when_<condition>`.
 - Do not add explanatory comments to code that is already clear.
 

@@ -32,7 +32,7 @@ reviews:
         - No `# type: ignore` without an error code
         - Context managers for files, sessions, and locks
         - structlog with keyword context, never `print()` or stdlib logging
-        - Ruff: line-length 100, double quotes, rules E F I N W UP B SIM
+        - Ruff: line-length 120, single quotes, rules E W F I C90 UP B SIM
         - Single-line imports, no wildcard imports
 
     - path: "**/tests/**/*.py"
