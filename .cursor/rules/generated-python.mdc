@@ -1,0 +1,58 @@
+---
+description: "python standards"
+alwaysApply: true
+---
+
+# Python
+
+## Version and tooling
+
+- DO: Target Python 3.12+
+- DO: Manage dependencies and virtual environments with `uv`
+- DO: Run commands through `uv run <command>`
+- DON'T: Call `pip` directly
+
+## Style
+
+- DO: Use Ruff for both linting and formatting
+- DO: Use line-length 120, single quotes, space indentation
+- DO: Enable rules E, W, F, I, C90, UP, B, SIM with max-complexity 10
+- DON'T: Use black alongside Ruff format
+- DON'T: Disable a lint rule without recording the reason in `pyproject.toml`
+
+## Imports
+
+- DO: Force single-line imports
+- DO: Leave two blank lines after the import block
+- DO: Declare first-party packages in the isort configuration
+- DON'T: Use wildcard imports
+
+## Types
+
+- DO: Annotate every function signature, parameters and return
+- DO: Run mypy in strict mode
+- DO: Use PEP 604 unions (`X | Y`)
+- DO: Use Pydantic v2 for runtime validation and settings
+- DON'T: Use `Any` where a specific type is knowable
+- DON'T: Write `# type: ignore` without an error code
+
+## Naming
+
+- DO: snake_case for functions, variables and modules
+- DO: PascalCase for classes
+- DO: UPPER_SNAKE_CASE for constants
+- DO: Prefix private members with an underscore
+- DON'T: Abbreviate in public APIs except for universally understood terms (id, url, http)
+
+## Errors
+
+- DO: Catch specific exception types
+- DO: Use `raise ... from err` to preserve the chain
+- DO: Use context managers for files, sessions and locks
+- DON'T: Use a bare `except:`
+- DON'T: Catch `Exception` except when re-raising or logging at a top-level boundary
+
+## Comments
+
+- DO: Explain why something non-obvious is done
+- DON'T: Restate what the code already says

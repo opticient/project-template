@@ -1,0 +1,268 @@
+# Copilot Instructions
+
+<!-- BEGIN GENERATED RULES -->
+
+# Code Structure
+
+- DO: Keep `src/` for library and application code, `tests/` for tests, `scripts/` for one-off entry points
+- DO: Keep route and CLI handlers thin; put logic in service modules
+- DO: Group by feature rather than by layer once a project outgrows a handful of modules
+- DO: Read configuration once, through a Pydantic settings object
+- DON'T: Read environment variables scattered through the codebase
+- DON'T: Put business logic in serializers, schemas or views
+
+# Conventional Commits
+
+## Format
+
+- DO: Use `<type>(scope): description`
+- DO: Keep the header under 100 characters
+- DO: Use lowercase for type and scope
+- DO: Write the description in imperative mood ("add feature", not "added feature")
+- DO: Leave a blank line before the body and before the footer
+- DON'T: End the subject line with a period
+- DON'T: Capitalize the first word of the description
+- DON'T: Leave the type empty
+
+## Types
+
+- DO: Use only these: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+- DO: Use `feat` for new behavior a user can see
+- DO: Use `fix` for bug fixes
+- DO: Use `refactor` for changes that neither fix a bug nor add a feature
+- DO: Use `perf` for performance work
+- DO: Use `test` for adding or correcting tests
+- DO: Use `build` for dependency or build system changes
+- DO: Use `ci` for pipeline changes
+- DO: Use `chore` for maintenance with no production code change
+- DO: Use `docs` for documentation-only changes
+
+## Scopes
+
+- DO: Use the module or feature name as scope (`retrieval`, `api`, `ingest`, `eval`)
+- DON'T: Omit the scope unless the change is genuinely global
+
+## Breaking changes
+
+- DO: Add `!` after the type or scope (`feat(api)!: drop v1 endpoints`)
+- DO: Include a `BREAKING CHANGE:` footer explaining the migration
+- DON'T: Ship a breaking change with only one of the two
+
+## Tooling
+
+- DO: Let the `commit-msg` hook validate the message
+- DON'T: Bypass validation with `--no-verify`
+
+# Git Workflow
+
+## Branches
+
+- DO: Branch from `staging` for all work
+- DO: Name branches `<type>/<kebab-case-topic>` (`feat/hybrid-retrieval`, `fix/empty-query`)
+- DO: Let the CI bot open the pull request — pushing a branch opens it against `staging`
+- DON'T: Push directly to `main` or `staging`; the server rejects it
+- DON'T: Force-push a branch that has an open pull request under review
+
+## Flow
+
+```
+feat/thing  ->  PR  ->  staging  ->  PR  ->  main
+```
+
+- DO: Treat `staging` as the integration branch and `main` as the released state
+- DO: Merge `staging` into your branch to resolve conflicts, rather than rebasing a shared branch
+
+## Review
+
+- DO: Require one approval before merge; the repository enforces this
+- DO: Review for correctness first, style second — the linter already covers style
+- DO: Resolve every conversation before merging
+- DON'T: Approve a pull request you authored
+- DON'T: Merge with failing checks
+
+## Pull requests
+
+- DO: Keep pull requests small enough to review in one sitting
+- DO: Explain why the change is being made, not only what changed
+- DO: Say how the reviewer can verify it
+
+# ML and Data Projects
+
+## Reproducibility
+
+- DO: Set and record a random seed for every training or evaluation run
+- DO: Record dataset version, model version, hyperparameters and metrics for each run
+- DO: Pin dependency versions in the lockfile
+- DON'T: Report a metric that cannot be reproduced from what is committed
+
+## Structure
+
+- DO: Keep notebooks for exploration only; move anything reused into `src/`
+- DO: Separate data loading, feature engineering, training and inference into distinct modules
+- DO: Make training runnable from the command line, not only from a notebook
+- DON'T: Import from a notebook in application code
+
+## Evaluation
+
+- DO: Fix the train, validation and test split before looking at results
+- DO: Report the baseline alongside the model — a number without a baseline says nothing
+- DO: Report latency and cost next to quality metrics
+- DO: Use Recall@K, MRR and NDCG for retrieval; state K explicitly
+- DON'T: Tune against the test set
+- DON'T: Compare runs that used different splits or preprocessing
+
+## Serving
+
+- DO: Load the model once at startup, not per request
+- DO: Validate inputs with Pydantic before they reach the model
+- DO: Return a version identifier with every prediction
+- DON'T: Block the event loop with synchronous inference in an async handler
+
+## LLM providers
+
+- DO: Access providers through one interface so the backend can be swapped
+- DO: Read provider, model and key from configuration
+- DO: Set explicit timeouts and retry limits on every provider call
+- DON'T: Hardcode a provider or model name in application code
+- DON'T: Call a paid API from a test
+
+# Pre-commit Hooks
+
+- DO: Use the `pre-commit` framework via `.pre-commit-config.yaml`
+- DO: Run `pre-commit install` and `pre-commit install --hook-type commit-msg` after cloning
+- DO: Pin every hook revision; upgrade deliberately
+- DO: Include check-json, check-yaml, check-toml, check-merge-conflict, end-of-file-fixer and trailing-whitespace
+- DO: Include detect-private-key, detect-aws-credentials and check-added-large-files
+- DO: Include ruff-check and ruff-format
+- DO: Set `fail_fast: true` so the first failure stops the run
+- DON'T: Add a hook that takes longer than ten seconds on an incremental run
+- DON'T: Skip hooks with `--no-verify`
+- DON'T: Disable hooks in CI — run them as their own step instead
+
+# Python
+
+## Version and tooling
+
+- DO: Target Python 3.12+
+- DO: Manage dependencies and virtual environments with `uv`
+- DO: Run commands through `uv run <command>`
+- DON'T: Call `pip` directly
+
+## Style
+
+- DO: Use Ruff for both linting and formatting
+- DO: Use line-length 120, single quotes, space indentation
+- DO: Enable rules E, W, F, I, C90, UP, B, SIM with max-complexity 10
+- DON'T: Use black alongside Ruff format
+- DON'T: Disable a lint rule without recording the reason in `pyproject.toml`
+
+## Imports
+
+- DO: Force single-line imports
+- DO: Leave two blank lines after the import block
+- DO: Declare first-party packages in the isort configuration
+- DON'T: Use wildcard imports
+
+## Types
+
+- DO: Annotate every function signature, parameters and return
+- DO: Run mypy in strict mode
+- DO: Use PEP 604 unions (`X | Y`)
+- DO: Use Pydantic v2 for runtime validation and settings
+- DON'T: Use `Any` where a specific type is knowable
+- DON'T: Write `# type: ignore` without an error code
+
+## Naming
+
+- DO: snake_case for functions, variables and modules
+- DO: PascalCase for classes
+- DO: UPPER_SNAKE_CASE for constants
+- DO: Prefix private members with an underscore
+- DON'T: Abbreviate in public APIs except for universally understood terms (id, url, http)
+
+## Errors
+
+- DO: Catch specific exception types
+- DO: Use `raise ... from err` to preserve the chain
+- DO: Use context managers for files, sessions and locks
+- DON'T: Use a bare `except:`
+- DON'T: Catch `Exception` except when re-raising or logging at a top-level boundary
+
+## Comments
+
+- DO: Explain why something non-obvious is done
+- DON'T: Restate what the code already says
+
+# Secrets and Public Repositories
+
+Every repository in this organization is public. Git history is permanent, and
+anything pushed is scraped within minutes.
+
+- DO: Keep real values in `.env`, which is gitignored
+- DO: Keep `.env.example` filled with obviously fake values
+- DO: Store CI credentials as repository or organization secrets
+- DO: Use the GitHub noreply address as your commit email
+- DO: Rotate a key immediately if it is ever committed, even if the commit is deleted
+- DON'T: Commit an API key, token, password, private key or connection string
+- DON'T: Commit an internal hostname, endpoint or personal email address
+- DON'T: Assume deleting a file removes it from history — it does not
+
+## Data and models
+
+- DON'T: Commit datasets, model weights, checkpoints or any file over 5 MB
+- DO: Keep `data/` and `models/` gitignored, tracked only by a `.gitkeep`
+- DO: Record how to obtain or regenerate a dataset instead of committing it
+- DO: Strip notebook outputs before committing
+
+# Structured Logging
+
+- DO: Create loggers with `structlog.get_logger(__name__)`
+- DO: Pass context as keyword arguments: `log.info("query_served", latency_ms=x, k=5)`
+- DO: Render JSON in production and console output in development
+- DON'T: Use the stdlib `logging` module directly
+- DON'T: Use `print()` for application logging
+- DON'T: Use f-strings or `%` formatting for log messages
+
+## Levels
+
+- DO: `error` for unrecoverable failures
+- DO: `warn` for recoverable issues and deprecated usage
+- DO: `info` for significant events (request handled, job finished)
+- DO: `debug` for diagnostics, disabled in production
+- DON'T: Log at `info` inside tight loops
+- DON'T: Use `error` for expected validation failures
+
+## Sensitive data
+
+- DON'T: Log API keys, tokens, passwords or personal data at any level
+- DON'T: Log full request or response bodies outside `debug`
+- DO: Redact or mask sensitive fields before logging
+
+# Testing
+
+## General
+
+- DO: Use pytest, not unittest
+- DO: Name test files `test_*.py` and test functions `test_should_<behavior>_when_<condition>`
+- DO: Use PascalCase `Test*` for test classes
+- DO: Follow Arrange-Act-Assert in every test
+- DO: Test one behavior per test
+- DO: Set `pythonpath = ["."]` in the pytest configuration
+- DON'T: Share mutable state between tests
+- DON'T: Write tests that depend on execution order
+- DON'T: Commit `.skip` without a linked issue
+
+## Isolation
+
+- DO: Mock external HTTP, database and AI provider calls in unit tests
+- DO: Use a disposable database for integration tests
+- DON'T: Call a real LLM or embedding API in automated tests — it costs money and is non-deterministic
+- DON'T: Run tests against a production or shared database
+
+## Coverage
+
+- DO: Enable branch coverage
+- DO: Treat a coverage drop as a blocking review comment
+- DON'T: Write assertions-free tests to inflate the number
+
+<!-- END GENERATED RULES -->
