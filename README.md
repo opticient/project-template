@@ -11,14 +11,17 @@ Starting point for opticient projects. Click **Use this template**, then:
 
 ```sh
 cp .env.example .env
-make setup
-make test
+uv sync --all-groups
+uv run pre-commit install --install-hooks
+uv run pre-commit install --hook-type commit-msg
+git config commit.template .gitmessage
+docker compose up -d
 ```
 
 Requires Docker, [uv](https://docs.astral.sh/uv/), and Python 3.12.
 
-`make setup` also installs the pre-commit hooks, so lint, formatting, type
-checks, secret detection and commit-message rules run before every commit.
+The hooks run lint, formatting, type checks, secret detection and
+commit-message rules before every commit.
 
 ## Ports
 
@@ -32,13 +35,50 @@ checks, secret detection and commit-message rules run before every commit.
 
 | Command | Does |
 |---------|------|
-| `make setup` | First-time setup |
-| `make up` / `make down` | Start / stop services |
-| `make test` | Tests with coverage |
-| `make lint` | Ruff, format check, mypy |
-| `make fmt` | Auto-format and fix |
-| `make hooks` | Run every pre-commit hook on all files |
-| `make clean` | Stop services and delete all data |
+| `docker compose up -d` | Start services |
+| `docker compose down` | Stop services, keep data |
+| `docker compose down -v` | Stop services and delete all data |
+| `uv run pytest` | Tests with coverage |
+| `uv run ruff check .` | Lint |
+| `uv run ruff format .` | Format |
+| `uv run mypy src` | Type check |
+| `uv run pre-commit run --all-files` | Every hook on every file |
+
+## Pre-commit hooks
+
+Install once per clone. Two installs are needed: one for the code hooks, one for
+the commit-message hook.
+
+```sh
+uv run pre-commit install --install-hooks
+uv run pre-commit install --hook-type commit-msg
+```
+
+Verify:
+
+```sh
+uv run pre-commit run --all-files
+```
+
+What runs on every commit:
+
+| Hook | Blocks |
+|------|--------|
+| `ruff-check` | lint errors, with autofix |
+| `ruff-format` | unformatted code |
+| `mypy` | type errors |
+| `detect-private-key` | a committed private key |
+| `detect-aws-credentials` | committed AWS keys |
+| `check-added-large-files` | anything over 5 MB |
+| `debug-statements` | a forgotten `breakpoint()` |
+| `check-json` / `check-yaml` / `check-toml` | malformed config |
+| `check-merge-conflict` | conflict markers |
+| `end-of-file-fixer` / `trailing-whitespace` | whitespace noise |
+| `conventional-pre-commit` | a commit message that breaks the format |
+| `pytest` | failing tests |
+
+`fail_fast: true`, so the run stops at the first failure. Never bypass with
+`--no-verify` — the secret checks are the reason these exist on a public repo.
 
 ## Branches
 

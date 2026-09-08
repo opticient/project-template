@@ -5,9 +5,9 @@
 ## How to verify
 
 ```sh
-make setup
-make test
-make lint
+uv run pytest
+uv run ruff check .
+uv run mypy src
 ```
 
 ## Checklist
