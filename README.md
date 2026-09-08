@@ -45,17 +45,17 @@ checks, secret detection and commit-message rules run before every commit.
 `main` and `staging` are both protected and reject direct pushes.
 
 ```
-feat/thing  ->  PR  ->  staging  ->  PR  ->  main
+as/feat/thing  ->  PR  ->  staging  ->  PR  ->  main
 ```
 
 ```sh
-git switch -c feat/thing
+git switch -c as/feat/thing
 git push
 ```
 
-Pushing a branch opens a PR to `staging` automatically and requests review from
-the other person. Merging into `staging` opens a release PR to `main`. Every PR
-needs one approval.
+Pushing a branch opens one PR to `staging` automatically. If a PR is already
+open for that branch, later pushes do not open another. The `staging` to `main`
+release PR is opened by hand.
 
 ## Commits
 
