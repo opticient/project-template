@@ -7,10 +7,11 @@ Replace with what the project does and how it is structured.
 ## Commands
 
 ```sh
-make setup
-make test
-make lint
-make fmt
+uv run pytest
+uv run ruff check .
+uv run ruff format .
+uv run mypy src
+uv run pre-commit run --all-files
 ```
 
 <!-- BEGIN GENERATED RULES -->
