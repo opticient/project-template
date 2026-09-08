@@ -1,0 +1,12 @@
+# Pre-commit Hooks
+
+- DO: Use the `pre-commit` framework via `.pre-commit-config.yaml`
+- DO: Run `pre-commit install` and `pre-commit install --hook-type commit-msg` after cloning
+- DO: Pin every hook revision; upgrade deliberately
+- DO: Include check-json, check-yaml, check-toml, check-merge-conflict, end-of-file-fixer and trailing-whitespace
+- DO: Include detect-private-key, detect-aws-credentials and check-added-large-files
+- DO: Include ruff-check and ruff-format
+- DO: Set `fail_fast: true` so the first failure stops the run
+- DON'T: Add a hook that takes longer than ten seconds on an incremental run
+- DON'T: Skip hooks with `--no-verify`
+- DON'T: Disable hooks in CI — run them as their own step instead

@@ -1,0 +1,23 @@
+# Structured Logging
+
+- DO: Create loggers with `structlog.get_logger(__name__)`
+- DO: Pass context as keyword arguments: `log.info("query_served", latency_ms=x, k=5)`
+- DO: Render JSON in production and console output in development
+- DON'T: Use the stdlib `logging` module directly
+- DON'T: Use `print()` for application logging
+- DON'T: Use f-strings or `%` formatting for log messages
+
+## Levels
+
+- DO: `error` for unrecoverable failures
+- DO: `warn` for recoverable issues and deprecated usage
+- DO: `info` for significant events (request handled, job finished)
+- DO: `debug` for diagnostics, disabled in production
+- DON'T: Log at `info` inside tight loops
+- DON'T: Use `error` for expected validation failures
+
+## Sensitive data
+
+- DON'T: Log API keys, tokens, passwords or personal data at any level
+- DON'T: Log full request or response bodies outside `debug`
+- DO: Redact or mask sensitive fields before logging

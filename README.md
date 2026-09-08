@@ -68,6 +68,32 @@ fix(api): handle empty query
 
 Types: feat fix docs style refactor perf test build ci chore revert
 
+## Rules
+
+`rules/` is the source of truth for engineering standards. Editing a file there
+and running the sync script regenerates every AI tool's config from it:
+
+```sh
+./scripts/sync-rules.sh
+```
+
+That writes `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`,
+`.cursor/rules/*.mdc` and `.windsurfrules`. Never edit those by hand — the
+generated block is replaced on every run. Project-specific notes go *above* the
+`BEGIN GENERATED RULES` marker and are preserved.
+
+| File | Covers |
+|------|--------|
+| `conventional-commits.md` | Commit message format, enforced by a hook |
+| `git-workflow.md` | Branches, PR flow, review expectations |
+| `python.md` | Version, Ruff, imports, types, errors, naming |
+| `testing.md` | pytest conventions, isolation, coverage |
+| `pre-commit-hooks.md` | Which hooks run and why |
+| `structured-logging.md` | structlog usage, levels, redaction |
+| `secrets-and-public-repos.md` | What must never be committed |
+| `ml-projects.md` | Reproducibility, evaluation, serving, LLM providers |
+| `code-structure.md` | Where code belongs |
+
 ## Secrets
 
 Real values go in `.env`, which is gitignored. Never commit a key — repos are

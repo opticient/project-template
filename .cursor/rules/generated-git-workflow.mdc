@@ -1,0 +1,39 @@
+---
+description: "git workflow standards"
+alwaysApply: true
+---
+
+<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
+
+# Git Workflow
+
+## Branches
+
+- DO: Branch from `staging` for all work
+- DO: Name branches `<type>/<kebab-case-topic>` (`feat/hybrid-retrieval`, `fix/empty-query`)
+- DO: Let the CI bot open the pull request — pushing a branch opens it against `staging`
+- DON'T: Push directly to `main` or `staging`; the server rejects it
+- DON'T: Force-push a branch that has an open pull request under review
+
+## Flow
+
+```
+feat/thing  ->  PR  ->  staging  ->  PR  ->  main
+```
+
+- DO: Treat `staging` as the integration branch and `main` as the released state
+- DO: Merge `staging` into your branch to resolve conflicts, rather than rebasing a shared branch
+
+## Review
+
+- DO: Require one approval before merge; the repository enforces this
+- DO: Review for correctness first, style second — the linter already covers style
+- DO: Resolve every conversation before merging
+- DON'T: Approve a pull request you authored
+- DON'T: Merge with failing checks
+
+## Pull requests
+
+- DO: Keep pull requests small enough to review in one sitting
+- DO: Explain why the change is being made, not only what changed
+- DO: Say how the reviewer can verify it

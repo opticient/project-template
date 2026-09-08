@@ -1,18 +1,4 @@
-# Agent Instructions
-
-## Project
-
-Replace this section with what the project does, how it is structured, and the
-commands needed to run it.
-
-## Commands
-
-```sh
-make setup    # dependencies, hooks, services
-make test
-make lint
-make fmt
-```
+# Copilot Instructions
 
 <!-- BEGIN GENERATED RULES -->
 

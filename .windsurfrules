@@ -1,22 +1,4 @@
-# Agent Instructions
-
-## Project
-
-Replace this section with what the project does, how it is structured, and the
-commands needed to run it.
-
-## Commands
-
-```sh
-make setup    # dependencies, hooks, services
-make test
-make lint
-make fmt
-```
-
-<!-- BEGIN GENERATED RULES -->
-
-Edit rules/ and run ./scripts/sync-rules.sh. Do not edit below this line.
+<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
 
 # Code Structure
 
@@ -281,4 +263,3 @@ anything pushed is scraped within minutes.
 - DO: Treat a coverage drop as a blocking review comment
 - DON'T: Write assertions-free tests to inflate the number
 
-<!-- END GENERATED RULES -->
