@@ -5,7 +5,6 @@ Starting point for opticient projects. Click **Use this template**, then:
 - Rename `name` in `pyproject.toml`
 - Rewrite this README and the Project section of `AGENTS.md`
 - Pick unused ports in `.env.example`
-- Set the `PR_REVIEWER` repo variable to the other person's username
 
 ## Setup
 
@@ -93,9 +92,10 @@ git switch -c as/feat/thing
 git push
 ```
 
-Pushing a branch opens one PR to `staging` automatically. If a PR is already
-open for that branch, later pushes do not open another. The `staging` to `main`
-release PR is opened by hand.
+Pushing a branch opens one PR to `staging` automatically and assigns it to you.
+If a PR is already open for that branch, later pushes do not open another.
+Reviewers are not requested automatically; add one when you want a review. The
+`staging` to `main` release PR is opened by hand.
 
 ## Commits
 
