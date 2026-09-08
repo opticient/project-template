@@ -6,6 +6,7 @@
 - DO: Name branches `<initials>/<type>/<kebab-case-topic>` (`as/feat/hybrid-retrieval`, `as/fix/empty-query`)
 - DO: Use your own initials so branch ownership is visible at a glance
 - DO: Let the CI bot open the pull request — pushing a branch opens one against `staging`
+- DO: Request a review yourself when you want one; reviewers are not assigned automatically
 - DO: Open the `staging` to `main` pull request by hand when you decide to release
 - DON'T: Push directly to `main` or `staging`; the server rejects it
 - DON'T: Force-push a branch that has an open pull request under review

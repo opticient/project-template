@@ -19,7 +19,6 @@ jobs:
       REPO: ${{ github.repository }}
       HEAD: ${{ github.ref_name }}
       ACTOR: ${{ github.actor }}
-      REVIEWER: ${{ vars.PR_REVIEWER }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,6 +41,3 @@ jobs:
           PR=$(gh pr list --repo "$REPO" --head "$HEAD" --base staging --state open \
             --json number -q '.[0].number')
           gh pr edit "$PR" --repo "$REPO" --add-assignee "$ACTOR" || true
-          if [ -n "${REVIEWER:-}" ] && [ "$REVIEWER" != "$ACTOR" ]; then
-            gh pr edit "$PR" --repo "$REPO" --add-reviewer "$REVIEWER" || true
-          fi
