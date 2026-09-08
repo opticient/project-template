@@ -1,0 +1,45 @@
+language: en-US
+reviews:
+  request_changes_workflow: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "**"
+      instructions: |
+        # Commits
+        - Use `<type>(scope): description`, header under 100 characters
+        - Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+        - Imperative mood, lowercase type and scope, no trailing period
+        - Breaking changes need both the `!` suffix and a `BREAKING CHANGE:` footer
+
+        # Secrets
+        - Never approve a diff containing an API key, token, password, or private key
+        - `.env` must never be committed; `.env.example` holds fake values only
+        - Repositories are public: flag anything that leaks a real email or endpoint
+
+        # Data and models
+        - Never approve committed datasets, model weights, or files over 5 MB
+        - Flag notebooks committed with output cells intact
+
+    - path: "**/*.py"
+      instructions: |
+        # Python
+        - Python 3.12+, PEP 604 unions, f-strings
+        - Type hints on every function signature
+        - Pydantic v2 for validation and settings
+        - No bare `except:`; catch specific types; use `raise ... from err`
+        - No `# type: ignore` without an error code
+        - Context managers for files, sessions, and locks
+        - structlog with keyword context, never `print()` or stdlib logging
+        - Ruff: line-length 100, double quotes, rules E F I N W UP B SIM
+        - Single-line imports, no wildcard imports
+
+    - path: "**/tests/**/*.py"
+      instructions: |
+        # Tests
+        - Name tests `test_should_<behavior>_when_<condition>`
+        - Arrange-Act-Assert, one behavior per test
+        - No shared mutable state, no order dependence
+        - Mock external AI and HTTP calls; never hit a real provider in CI
+        - No `.skip` without a linked issue

@@ -1,0 +1,47 @@
+name: Auto PR to staging
+
+on:
+  push:
+    branches-ignore: [main, staging]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: auto-pr-${{ github.ref_name }}
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.PR_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      HEAD: ${{ github.ref_name }}
+      ACTOR: ${{ github.actor }}
+      REVIEWER: ${{ vars.PR_REVIEWER }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open PR if there is something to review
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --quiet origin +refs/heads/staging:refs/remotes/origin/staging
+          if [ "$(git rev-list --count origin/staging..HEAD)" = "0" ]; then
+            echo "No commits beyond staging."; exit 0
+          fi
+          if gh pr list --repo "$REPO" --head "$HEAD" --base staging --state open \
+              --json number -q '.[0].number' | grep -qE '^[0-9]+$'; then
+            echo "PR already open."; exit 0
+          fi
+          gh pr create --repo "$REPO" --head "$HEAD" --base staging \
+            --title "[$HEAD] -> staging" \
+            --body "Auto-opened for @$ACTOR"
+          PR=$(gh pr list --repo "$REPO" --head "$HEAD" --base staging --state open \
+            --json number -q '.[0].number')
+          gh pr edit "$PR" --repo "$REPO" --add-assignee "$ACTOR" || true
+          if [ -n "${REVIEWER:-}" ] && [ "$REVIEWER" != "$ACTOR" ]; then
+            gh pr edit "$PR" --repo "$REPO" --add-reviewer "$REVIEWER" || true
+          fi

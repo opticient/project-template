@@ -1,0 +1,38 @@
+name: Staging to main PR
+
+on:
+  push:
+    branches: [staging]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: staging-to-main
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.PR_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open or refresh the release PR
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --quiet origin +refs/heads/main:refs/remotes/origin/main
+          if [ "$(git rev-list --count origin/main..HEAD)" = "0" ]; then
+            echo "Nothing to release."; exit 0
+          fi
+          if gh pr list --repo "$REPO" --head staging --base main --state open \
+              --json number -q '.[0].number' | grep -qE '^[0-9]+$'; then
+            echo "Release PR already open."; exit 0
+          fi
+          gh pr create --repo "$REPO" --head staging --base main \
+            --title "Release: staging -> main" \
+            --body "$(git log --format='- %s' origin/main..HEAD)"
