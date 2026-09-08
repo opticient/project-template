@@ -2,8 +2,6 @@
 
 <!-- BEGIN GENERATED RULES -->
 
-Edit rules/ and run ./scripts/sync-rules.sh. Do not edit below this line.
-
 # Code Structure
 
 - DO: Keep `src/` for library and application code, `tests/` for tests, `scripts/` for one-off entry points

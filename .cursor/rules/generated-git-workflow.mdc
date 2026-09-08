@@ -3,8 +3,6 @@ description: "git workflow standards"
 alwaysApply: true
 ---
 
-<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
-
 # Git Workflow
 
 ## Branches

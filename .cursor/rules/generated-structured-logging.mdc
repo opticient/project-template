@@ -3,8 +3,6 @@ description: "structured logging standards"
 alwaysApply: true
 ---
 
-<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
-
 # Structured Logging
 
 - DO: Create loggers with `structlog.get_logger(__name__)`

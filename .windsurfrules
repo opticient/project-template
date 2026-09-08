@@ -1,5 +1,3 @@
-<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
-
 # Code Structure
 
 - DO: Keep `src/` for library and application code, `tests/` for tests, `scripts/` for one-off entry points

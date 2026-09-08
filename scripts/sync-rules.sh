@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Generates every AI tool's rule file from rules/*.md.
-# Edit rules/, never the generated files. Run: ./scripts/sync-rules.sh
+# Generates AI tool rule files from rules/*.md. Edit rules/, not the output.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -16,9 +15,20 @@ rules_body() {
     done
 }
 
+rules_index() {
+    echo "Standards live in \`rules/\`. Read the file that covers what you are changing."
+    echo
+    for f in rules/*.md; do
+        name="$(basename "$f")"
+        desc="$(grep -m1 '^# ' "$f" | sed 's/^# //')"
+        echo "- \`rules/$name\` — $desc"
+    done
+    echo
+    echo "Regenerate tool configs with \`./scripts/sync-rules.sh\` after editing them."
+}
+
 write_block() {
-    local target="$1"
-    local tmp line
+    local target="$1" mode="$2" tmp line
     tmp="$(mktemp)"
     if [ -f "$target" ]; then
         line="$(grep -nxF "$BEGIN" "$target" | head -1 | cut -d: -f1 || true)"
@@ -32,9 +42,7 @@ write_block() {
     {
         echo "$BEGIN"
         echo
-        echo "Edit rules/ and run ./scripts/sync-rules.sh. Do not edit below this line."
-        echo
-        rules_body
+        if [ "$mode" = index ]; then rules_index; else rules_body; fi
         echo "$END"
     } >> "$tmp"
     mv "$tmp" "$target"
@@ -43,30 +51,23 @@ write_block() {
 
 mkdir -p .cursor/rules .github
 
-write_block AGENTS.md
-write_block CLAUDE.md
-write_block .github/copilot-instructions.md
+write_block AGENTS.md index
+write_block CLAUDE.md index
+write_block .github/copilot-instructions.md full
 
 rm -f .cursor/rules/generated-*.mdc
 for f in rules/*.md; do
     name="$(basename "$f" .md)"
-    out=".cursor/rules/generated-${name}.mdc"
     {
         echo '---'
         echo "description: \"${name//-/ } standards\""
         echo 'alwaysApply: true'
         echo '---'
         echo
-        echo '<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->'
-        echo
         cat "$f"
-    } > "$out"
+    } > ".cursor/rules/generated-${name}.mdc"
 done
 echo "wrote .cursor/rules/generated-*.mdc"
 
-{
-    echo '<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->'
-    echo
-    rules_body
-} > .windsurfrules
+rules_body > .windsurfrules
 echo "wrote .windsurfrules"

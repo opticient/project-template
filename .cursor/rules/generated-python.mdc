@@ -3,8 +3,6 @@ description: "python standards"
 alwaysApply: true
 ---
 
-<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
-
 # Python
 
 ## Version and tooling

@@ -3,8 +3,6 @@ description: "pre commit hooks standards"
 alwaysApply: true
 ---
 
-<!-- Generated from rules/. Run ./scripts/sync-rules.sh -->
-
 # Pre-commit Hooks
 
 - DO: Use the `pre-commit` framework via `.pre-commit-config.yaml`
