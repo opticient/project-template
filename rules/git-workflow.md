@@ -3,15 +3,17 @@
 ## Branches
 
 - DO: Branch from `staging` for all work
-- DO: Name branches `<type>/<kebab-case-topic>` (`feat/hybrid-retrieval`, `fix/empty-query`)
-- DO: Let the CI bot open the pull request — pushing a branch opens it against `staging`
+- DO: Name branches `<initials>/<type>/<kebab-case-topic>` (`as/feat/hybrid-retrieval`, `as/fix/empty-query`)
+- DO: Use your own initials so branch ownership is visible at a glance
+- DO: Let the CI bot open the pull request — pushing a branch opens one against `staging`
+- DO: Open the `staging` to `main` pull request by hand when you decide to release
 - DON'T: Push directly to `main` or `staging`; the server rejects it
 - DON'T: Force-push a branch that has an open pull request under review
 
 ## Flow
 
 ```
-feat/thing  ->  PR  ->  staging  ->  PR  ->  main
+as/feat/thing  ->  PR  ->  staging  ->  PR  ->  main
 ```
 
 - DO: Treat `staging` as the integration branch and `main` as the released state
